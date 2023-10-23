@@ -1,7 +1,14 @@
 use std::io::Error;
+use std::io::Read;
+
 use std::env;
+
+use std::str::FromStr;
+
 use std::collections::HashMap;
+
 use std::fs::write;
+use std::fs::OpenOptions;
 
 
 fn main() {
@@ -27,6 +34,22 @@ struct Todo {
 }
 
 impl Todo {
+    fn new() -> Result<Todo, Error> {
+        let mut file = OpenOptions::new()
+            .write(true)
+            .create(true)
+            .read(true)
+            .open("db.txt")?;
+        let mut fileContents = String::new();
+        file.read_to_string(&mut fileContents)?;
+        let map: HashMap<String, bool> = fileContents
+            .lines()
+            .map(|line| line.splitn(2, '\t').collect::<Vec<&str>>())
+            .map(|v| (v[0], v[1]))
+            .map(|(k, v)| (String::from(k), bool::from_str(v).unwrap()))
+            .collect();
+        Ok(Todo { map })
+    }
     fn insert(&mut self, key: String) {
         self.map.insert(key, true);
     }
