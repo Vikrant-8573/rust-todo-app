@@ -17,9 +17,7 @@ fn main() {
 
     println!("{}, {}", action, item);
 
-    let mut todo = Todo {
-        map: HashMap::new(),
-    };
+    let mut todo = Todo::new().expect("Initialization of db failed");
     if action == "add" {
         todo.insert(item);
         match todo.save() {
@@ -40,9 +38,9 @@ impl Todo {
             .create(true)
             .read(true)
             .open("db.txt")?;
-        let mut fileContents = String::new();
-        file.read_to_string(&mut fileContents)?;
-        let map: HashMap<String, bool> = fileContents
+        let mut file_contents = String::new();
+        file.read_to_string(&mut file_contents)?;
+        let map: HashMap<String, bool> = file_contents
             .lines()
             .map(|line| line.splitn(2, '\t').collect::<Vec<&str>>())
             .map(|v| (v[0], v[1]))
