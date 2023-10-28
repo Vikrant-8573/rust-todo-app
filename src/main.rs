@@ -29,7 +29,7 @@ fn main() {
             None => println!("'{}' is not present in the list.", item),
             Some(_) => match todo.save() {
                 Ok(_) => println!("Todo saved."),
-                Err(err) => println!("An error occurred: {}", why),
+                Err(err) => println!("An error occurred: {}", err),
             },
         }
     }
