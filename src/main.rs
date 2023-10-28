@@ -24,6 +24,14 @@ fn main() {
             Ok(_) => println!("Todo saved."),
             Err(err) => println!("An error occurred: {}", err),
         }
+    } else if action == "complete" {
+        match todo.complete_todo(&item) {
+            None => println!("'{}' is not present in the list.", item),
+            Some(_) => match todo.save() {
+                Ok(_) => println!("Todo saved."),
+                Err(err) => println!("An error occurred: {}", why),
+            },
+        }
     }
 }
 
@@ -50,6 +58,12 @@ impl Todo {
     }
     fn insert(&mut self, key: String) {
         self.map.insert(key, true);
+    }
+    fn complete_todo(&mut self, key: &String) -> Option<()> {
+        match self.map.get_mut(key) {
+            Some(v) => Some(*v = false),
+            None => None,
+        }
     }
     fn save(self) -> Result<(), Error> {
         let mut content = String::new();
