@@ -65,6 +65,12 @@ impl Todo {
             None => None,
         }
     }
+    fn update_todo(&mut self, key: &String, new_key: String) -> Result<(), Error> {
+        match self.map.get_mut(key) {
+            Some(k) => Some(*k = new_key),
+            None => None,
+        }
+    }
     fn save(self) -> Result<(), Error> {
         let mut content = String::new();
         for (k, v) in self.map {
